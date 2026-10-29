@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102120">
+  <meta name="description" content="用六块设计拼图，完成四个虚构研究场景。检查问题、变量、对照、随机安排、独立重复与结果指标，保存自己的设计卡。">
+  <title>实验设计工作台 · 一口科学</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23b8ee81'/%3E%3Cpath d='M17 18h30v32H17zM24 12h16v12H24z' stroke='%23102120' stroke-width='4' fill='none'/%3E%3Cpath d='M24 32h16M24 41h11' stroke='%23102120' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="design-lab.css"><script defer src="design-lab.js"></script>
+</head>
+<body class="design-lab">
+<a class="skip-link" href="#design-main">跳到工作台</a>
+<header class="site-header"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">◕</span><span>一口科学<small>ONE BITE SCIENCE</small></span></a><a class="design-back" href="index.html">← 返回游乐场</a></header>
+<main id="design-main" class="page-wrap" tabindex="-1">
+  <section class="design-hero"><div><span class="eyebrow">STUDY DESIGN / 实验设计工作台</span><h1>好问题，<br>也需要<em>好设计。</em></h1><p>拼好六块线索，看看你的比较是否说得清楚。<br>四个虚构情境，没有预设的实验结果。</p></div><div class="blueprint" aria-hidden="true"><span class="blueprint-top">A SMALL PLAN FOR A BIG QUESTION</span><div class="blueprint-grid"><span>问<small>问题</small></span><span>改<small>因素</small></span><span>控<small>条件</small></span><span>排<small>顺序</small></span><span>重<small>单位</small></span><span>测<small>指标</small></span></div><span class="blueprint-bottom">先想清楚，再开始。 ↗</span></div></section>
+  <div class="design-toolbar"><p id="total-progress" aria-live="polite">已完成 0 / 4 张设计卡</p><button type="button" id="design-motion" aria-pressed="false">无动效：关</button></div>
+  <div class="scenario-tabs" role="tablist" aria-label="选择虚构研究情境" id="scenario-tabs"></div>
+  <section id="scenario-panel" role="tabpanel" aria-labelledby="scenario-emulsion" tabindex="-1">
+    <div class="scenario-heading"><div><span class="eyebrow" id="scenario-number">SCENARIO 01</span><h2 id="scenario-title"></h2><p id="scenario-description"></p></div><span class="fiction-label">原创虚构情境</span></div>
+    <div class="constraint-box"><strong>本题的设计约束</strong><p id="scenario-constraints"></p></div>
+    <div class="design-workbench">
+      <aside class="step-nav"><div class="step-nav-heading"><h3>六块设计拼图</h3><span id="piece-count">0 / 6</span></div><ol id="design-steps" aria-label="设计步骤"></ol><p>每块选择一个方案。某些步骤有多种可行选法；检查仅针对本题给定的约束。</p></aside>
+      <div class="choice-board"><span class="step-counter" id="step-counter"></span><h3 id="step-title" tabindex="-1"></h3><p id="step-hint"></p><fieldset id="choice-fieldset"><legend class="visually-hidden" id="choice-legend"></legend><div id="design-choices"></div></fieldset><div class="step-controls"><button type="button" class="btn" id="previous-step">← 上一块</button><button type="button" class="btn primary" id="next-step">下一块 →</button></div><p class="selection-notice" id="selection-notice" role="status"></p></div>
+    </div>
+    <section class="free-notes" aria-labelledby="notes-title"><div><span class="eyebrow">YOUR OWN THINKING</span><h3 id="notes-title">给设计留一块可修改的地方</h3><p>可以补充另一种可行方案、分析方式或未解决的问题。这里的文字按原样保存，不会被自动判定为正确。</p></div><div class="notes-grid"><label for="design-revision">我的修订与补充<textarea id="design-revision" maxlength="2400" rows="4" placeholder="例如：按操作日期分组比较，并在每一天内随机安排处理。"></textarea><small id="revision-count">0 / 2400</small></label><label for="design-risk">局限与下一步<textarea id="design-risk" maxlength="2400" rows="4" placeholder="例如：评分者可能猜到条件；需要记录这一风险，并说明它会怎样影响解释。"></textarea><small id="risk-count">0 / 2400</small></label></div></section>
+    <div class="check-bar"><div><h3>让六块拼图相互对得上。</h3><p>检查给出具体理由，不预测实验结果，也不替代完整研究审查。</p></div><button type="button" class="btn primary" id="check-design">检查整张设计 ↗</button></div>
+    <section id="design-feedback" class="feedback-section" aria-labelledby="feedback-heading" hidden><h3 id="feedback-heading" tabindex="-1"></h3><p id="feedback-intro" role="status"></p><div id="feedback-items" class="feedback-grid"></div></section>
+    <section id="design-card" class="design-card" aria-labelledby="card-title" hidden><div class="card-topline"><span>ONE BITE SCIENCE / 我的设计卡</span><span id="card-stamp">框架检查完成</span></div><h2 id="card-title"></h2><p class="card-context" id="card-context"></p><dl id="card-fields"></dl><div class="card-own-notes"><h3>我的修订与补充 <small>未自动评审</small></h3><p id="card-revision"></p><h3>局限与下一步 <small>未自动评审</small></h3><p id="card-risk"></p></div><p class="card-boundary">这是虚构情境下的一份教学设计草案。通过框架检查不代表设计唯一、因果关系成立、样本量足够或结果可推广；自由文字未自动评审。实际研究仍需论证方法、测量、分析与适用边界。</p><div class="card-actions"><button type="button" class="btn primary" id="print-design">打印这张设计卡</button><button type="button" class="btn" id="export-design">导出 UTF-8 文本</button></div></section>
+  </section>
+  <details class="design-sources"><summary>设计原则、资料与适用边界</summary><p><b>安排与对照：</b>明确操纵因素和响应指标，考虑其他可能影响结果的条件；将处理随机分配给实验单位，或随机安排运行顺序，可减少处理与先后顺序系统性重合的风险。随机化不会保证一轮小样本自动完全平衡。</p><p><b>实验单位与盲法：</b>先判断处理真正施加在哪个单位。重复读取同一单位的结果不能自动增加独立单位数。盲法应说明“谁不知道什么”；当标签本身是操纵因素时，不能把要比较的标签也完全隐藏。</p><ul><li><a href="https://www.itl.nist.gov/div898/handbook/pri/section3/pri331.htm" target="_blank" rel="noopener noreferrer">NIST/SEMATECH：§5.3.3.1 Completely randomized designs ↗</a></li><li><a href="https://openstax.org/books/introductory-statistics-2e/pages/1-4-experimental-design-and-ethics" target="_blank" rel="noopener noreferrer">OpenStax：Introductory Statistics 2e §1.4 实验设计与伦理 ↗</a></li></ul><p>上述官方教程已于 2026-10-29 核验，用于支持一般原则。本站四个问题、选项、反馈与约束均为原创虚构练习，不是教材实验，也不提供真实培养、食品制作、食用或健康建议。现实中也可以采用更复杂的多因素、配对或区组设计；本工作台只检查所展示的简化框架。</p></details>
+  <section class="design-storage"><div><h3>你的思考，留在这个浏览器。</h3><p id="design-storage-note">四个场景分别保存选择与自由记录。离线可用，换浏览器或清除网站数据后记录可能丢失。</p></div><button type="button" class="btn" id="clear-design">清除本页进度</button></section>
+</main>
+<footer class="site-footer"><span>不急着得到答案，先设计一个能回答的问题。</span><a href="index.html">继续探索一口科学 ↗</a></footer>
+<dialog id="clear-dialog" aria-labelledby="clear-title" aria-describedby="clear-description"><h2 id="clear-title">清除这四个场景的记录？</h2><p id="clear-description">这会清除本页已保存的选择、设计卡和自由文字，其他实验的记录不受影响。你可以先取消并导出已完成的设计卡。</p><div class="dialog-actions"><button type="button" class="btn primary" id="cancel-clear">保留记录</button><button type="button" class="btn" id="confirm-clear">确认清除本页记录</button></div></dialog>
+<div class="design-toast" id="design-toast" role="status" aria-live="polite"></div>
+<noscript><div class="noscript">设计工作台需要启用 JavaScript。下方资料与适用边界仍可阅读。</div></noscript>
+</body>
+</html>

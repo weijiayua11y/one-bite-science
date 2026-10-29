@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102120">
+  <meta name="description" content="互动实验、八关小游戏、科普短片与纸上探究手册。给好奇心的科学游乐场。">
+  <title>一口科学 · 好奇心游乐场</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='20' fill='%23b8ee81'/%3E%3Cpath d='M23 13h18M27 14v15L16 47q-3 7 5 7h22q8 0 5-7L37 29V14' fill='none' stroke='%23102120' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='30' cy='41' r='4' fill='%23102120'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="games/diffusion.css">
+  <link rel="stylesheet" href="games/emulsion.css">
+  <link rel="stylesheet" href="games/evidence.css">
+  <script defer src="games/diffusion.js"></script>
+  <script defer src="games/emulsion.js"></script>
+  <script defer src="games/evidence.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要内容</a>
+<header class="site-header">
+  <a class="brand" href="#home" aria-label="一口科学首页"><span class="brand-mark" aria-hidden="true">◕</span><span>一口科学<small>ONE BITE SCIENCE</small></span></a>
+  <nav aria-label="主导航"><a href="#home" data-nav="home">游乐场</a><a href="#journal" data-nav="journal">探索手记 <span id="badge-count">0</span></a><button class="about-btn" id="about-open" aria-haspopup="dialog">关于</button></nav>
+</header>
+<main id="main" tabindex="-1"></main>
+<footer class="site-footer"><span>好奇心，不需要标准答案。</span><span>概念模拟 · 原创虚构题目 · 学习用</span><button id="footer-about">模型与资料说明 ↗</button></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="about-dialog" aria-labelledby="about-title">
+  <div class="dialog-heading"><span class="eyebrow">FIELD NOTES / 关于</span><button class="close-btn" id="about-close" aria-label="关闭说明">×</button></div>
+  <h2 id="about-title">先有好奇，再有理解。</h2>
+  <p>《一口科学》是一座小小的互动游乐场。你可以观察分子随机运动、试着调出乳化体系，练习判断证据、理解数字与设计实验，也可以休息一下，玩八关虚构快递游戏。</p>
+  <h3>看得见的边界</h3>
+  <p>粒子、动画和指标是帮助理解的简化模型。它们不对应真实分子尺寸、实验时间、产品配方或保质期，不能用作实验测量、工艺预测或食用建议。首页插画为 AI 生成的装饰图。</p>
+  <p>证据侦探里的研究与数字均为原创虚构教学案例。科学模块附有资料入口；请把来源中的结论和本页的游戏规则区分开。微观快递属于纯虚构益智玩法，不模拟真实分子运输。视频旁白由计算机合成，教学数值与模拟结果均不代表实验测量。</p>
+  <h3>只在你的浏览器里</h3>
+  <p>探索徽章与最高成绩保存在当前浏览器本地。不需要填写个人信息；切换浏览器、清除网站数据或使用隐私模式可能无法保留记录。</p>
+  <button class="btn primary" id="about-done">明白了，去探索</button>
+</dialog>
+<noscript><div class="noscript">这座游乐场需要 JavaScript 才能运行。请在浏览器中启用后刷新页面。</div></noscript>
+</body>
+</html>

@@ -1,0 +1,50 @@
+(function () {
+  'use strict';
+  window.LabModules = window.LabModules || {};
+  window.LabModules.diffusion = {
+    mount: function (container, options) {
+      options = options || {};
+      container.innerHTML = `<section class="dfx-lab" aria-label="分子漫游互动实验">
+        <div class="dfx-top"><div><span class="dfx-eyebrow">MICRO WORLD / 01</span><h2>分子漫游</h2><p>没有领队，也能慢慢散开。观察随机运动如何改变整体分布。</p></div><span class="dfx-tag">概念模拟 · 不代表实验测量</span></div>
+        <div class="dfx-layout"><div class="dfx-experiment"><div class="dfx-canvas-wrap"><canvas role="img" aria-label="两侧等体积空间中，粒子随机运动的概念动画"></canvas><div class="dfx-chambers" aria-hidden="true"><span>左侧空间</span><span>右侧空间</span></div></div>
+        <div class="dfx-counts"><span>左侧 <strong data-left>96</strong></span><div class="dfx-meter" aria-hidden="true"><i></i></div><span>右侧 <strong data-right>0</strong></span></div>
+        <p class="dfx-status" role="status" aria-live="off"></p>
+        <div class="dfx-controls"><button type="button" data-gate>移除隔板</button><button type="button" data-pause>暂停</button><button type="button" data-reset>重新开始</button></div>
+        <fieldset class="dfx-temperature"><legend>温度档位 <span>只比较相对运动快慢</span></legend><div><label><input type="radio" name="dfx-temp" value="low">低</label><label><input type="radio" name="dfx-temp" value="mid" checked>中</label><label><input type="radio" name="dfx-temp" value="high">高</label></div></fieldset>
+        <button class="dfx-uniform" type="button" data-uniform hidden>切换到均匀初始分布，继续观察</button>
+        <p class="dfx-small dfx-motion-note"></p></div>
+        <aside class="dfx-challenge"><div class="dfx-progress" aria-label="完成进度"><span class="dfx-active">01</span><b></b><span>02</span><b></b><span>03</span></div><p class="dfx-step"></p><h3></h3><p class="dfx-prompt"></p><div class="dfx-answers"></div><p class="dfx-feedback" role="status" aria-live="polite"></p><button type="button" class="dfx-next" hidden>继续探索 →</button></aside></div>
+        <details class="dfx-source"><summary>这场漫游背后的科学</summary><p>粒子持续做随机运动；在两侧体积相等、条件相同时，初始浓度差会带来从高浓度侧到低浓度侧的整体净迁移。分布接近均匀后，粒子仍在运动，两侧数量也会波动。其他条件相同时，升温通常使粒子运动更快。</p><p>画面采用简化随机游走；粒子大小、颜色、时间和速度均为示意，不计算真实扩散系数。均匀初始分布是手动设置的对照状态，并非自动判定已达到平衡。</p><a href="https://openstax.org/books/biology-2e/pages/5-2-passive-transport" target="_blank" rel="noopener noreferrer">来源：OpenStax Biology 2e · 5.2 Passive Transport ↗</a></details>
+      </section>`;
+      var root = container.querySelector('.dfx-lab'), canvas = root.querySelector('canvas'), ctx = canvas.getContext('2d');
+      var $ = function (s) { return root.querySelector(s); };
+      var listeners = [], raf = 0, dead = false, w = 600, h = 300, last = 0, clock = 0;
+      var particles = [], gate = true, paused = false, temp = 'mid', stage = 0, score = 0, answered = false, attempted = false, complete = false, uniform = false, openTime = 0, highTime = 0, uniformTime = 0, ready = false;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var questions = [
+        {title:'隔板移除后，会发生什么？', prompt:'左侧有 96 个示意粒子，右侧为空。先作预测，再亲手打开通道。', answers:['所有粒子都只向右走','粒子方向随机，整体逐渐向右扩散','粒子会留在原地'], correct:1, why:'单个粒子没有预定方向。左侧起初粒子更多，跨向右侧的机会总数更多，于是形成整体净迁移。'},
+        {title:'把温度调高，会怎样？', prompt:'隔板已移除。其他条件相同时，预测粒子的相对运动快慢。', answers:['运动通常更快','运动停止','运动方向全都朝右'], correct:0, why:'其他条件相同时，升温通常使粒子运动更快。温度不会给随机运动指定一个共同方向；这里的档位只表示相对快慢。'},
+        {title:'两侧差不多多，就停下来了吗？', prompt:'现在使用人为设置的均匀初始分布。看看粒子是否还在穿过中线。', answers:['达到均匀后，全部停止','仍随机运动，数量在近似均匀附近波动','所有粒子会重新聚到左侧'], correct:1, why:'动态平衡中的“动态”正是持续运动。两侧仍会互相交换粒子，只是长期平均没有固定方向的净迁移；小系统的瞬时数量会波动。'}
+      ];
+      function on(el, event, fn) { el.addEventListener(event, fn); listeners.push(function () { el.removeEventListener(event, fn); }); }
+      function seed(even) { particles = Array.from({length:96}, function (_, i) { return {x: even ? (i < 48 ? .04 + Math.random() * .43 : .53 + Math.random() * .43) : .04 + Math.random() * .42, y:.1 + Math.random() * .8, a:Math.random() * Math.PI * 2}; }); }
+      function resize() { var box = canvas.getBoundingClientRect(); w = Math.max(1, box.width); h = Math.max(1, box.height); var dpr = Math.min(window.devicePixelRatio || 1, 2.5); canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr); if (ctx) ctx.setTransform(dpr,0,0,dpr,0,0); draw(); }
+      function counts() { var left = particles.filter(function(p) {return p.x < .5;}).length; $('[data-left]').textContent=left; $('[data-right]').textContent=96-left; $('.dfx-meter i').style.width=(left/96*100)+'%'; var text=(paused?'已暂停。':'随机运动中。')+(gate?'隔板关闭；':'隔板已移除；')+'左侧 '+left+'，右侧 '+(96-left)+'。温度：'+({low:'低',mid:'中',high:'高'}[temp])+'。'; $('.dfx-status').textContent=text; canvas.setAttribute('aria-label',text+'概念模拟，不代表实验测量。'); }
+      function draw() { if (!ctx) return; ctx.clearRect(0,0,w,h); var grad=ctx.createLinearGradient(0,0,w,h); grad.addColorStop(0,'#162f2d'); grad.addColorStop(1,'#102121'); ctx.fillStyle=grad; ctx.fillRect(0,0,w,h); ctx.strokeStyle='#28423e'; ctx.lineWidth=1; for(var x=24;x<w;x+=32){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();} for(var y=24;y<h;y+=32){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();} ctx.setLineDash(gate?[]:[4,8]); ctx.strokeStyle=gate?'#a1b8b0':'#44625b'; ctx.lineWidth=gate?3:1; ctx.beginPath();ctx.moveTo(w/2,12);ctx.lineTo(w/2,h-12);ctx.stroke();ctx.setLineDash([]); particles.forEach(function(p,i){ctx.beginPath();ctx.fillStyle=i===0?'#f9dba2':'#b8ee81';ctx.arc(p.x*w,p.y*h,i===0?5:3,0,Math.PI*2);ctx.fill(); if(i===0){ctx.strokeStyle='#f9dba266';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x*w,p.y*h,9,0,Math.PI*2);ctx.stroke();}}); }
+      function renderQuestion() { var q=questions[stage]; ready=stage===0 || (stage===1 && openTime>=3) || (stage===2 && uniformTime>=2 && highTime>=2); $('.dfx-step').textContent='观察挑战 '+(stage+1)+' / 3'; $('h3').textContent=q.title; $('.dfx-prompt').textContent=ready?q.prompt:(stage===1?'现在移除隔板，观察 3 秒：粒子是否能到达右侧？':'先将温度调到高，观察 2 秒；再切换均匀初始分布，继续观察 2 秒。'); $('.dfx-answers').innerHTML=''; if(ready) q.answers.forEach(function(text,i){var b=document.createElement('button'); b.type='button'; b.textContent=text; b.className='dfx-answer'; b.dataset.answer=i; $('.dfx-answers').appendChild(b);}); $('.dfx-progress').querySelectorAll('span').forEach(function(el,i){el.className=i<stage?'dfx-done':i===stage?'dfx-active':'';el.textContent=i<stage?'✓':'0'+(i+1);}); }
+      function reset() { gate=true;paused=false;temp='mid';stage=0;score=0;answered=false;attempted=false;complete=false;uniform=false;openTime=0;highTime=0;uniformTime=0;ready=false; seed(false); $('[data-gate]').disabled=true; $('[data-gate]').textContent='先完成预测'; $('[data-pause]').textContent='暂停'; $('[data-uniform]').hidden=true; root.querySelector('input[value="mid"]').checked=true; $('.dfx-feedback').textContent=''; $('.dfx-next').hidden=true; renderQuestion();counts();draw(); }
+      on($('.dfx-answers'),'click',function(e){var b=e.target.closest('[data-answer]');if(!b||answered||!ready)return;var correct=Number(b.dataset.answer)===questions[stage].correct; if(!correct){attempted=true;b.disabled=true;b.classList.add('dfx-wrong');$('.dfx-feedback').textContent='再想一想。'+questions[stage].why;return;}answered=true;if(!attempted)score++;b.classList.add('dfx-correct');$('.dfx-answers').querySelectorAll('button').forEach(function(btn){btn.disabled=true;});$('.dfx-feedback').textContent='预测正确！'+questions[stage].why; if(stage<2){$('.dfx-next').hidden=false;}else{complete=true;$('.dfx-step').textContent='3 / 3 挑战完成';$('.dfx-feedback').textContent+=' 已获得「扩散观察员」徽章。首次答对 '+score+' / 3；你可以继续自由探索。';if(typeof options.onComplete==='function')options.onComplete({game:'diffusion',score:score,maxScore:3,badge:'扩散观察员'});}});
+      on($('.dfx-next'),'click',function(){stage++;answered=false;attempted=false;$('.dfx-feedback').textContent='';$('.dfx-next').hidden=true;if(stage===1){$('[data-gate]').disabled=false;$('[data-gate]').textContent=gate?'移除隔板':'隔板已移除';}if(stage===2)$('[data-uniform]').hidden=false;renderQuestion();if(stage===1)$('[data-gate]').focus();else root.querySelector('input[value="high"]').focus();});
+      on($('[data-gate]'),'click',function(){gate=false;this.disabled=true;this.textContent='隔板已移除';counts();draw();});
+      on($('[data-pause]'),'click',function(){paused=!paused;this.textContent=paused?'继续':'暂停';counts();});
+      on($('[data-reset]'),'click',reset);
+      on($('.dfx-temperature'),'change',function(e){if(e.target.matches('input')){temp=e.target.value;counts();}});
+      on($('[data-uniform]'),'click',function(){seed(true);uniform=true;gate=false;uniformTime=0;this.textContent='重新设置均匀初始分布';$('.dfx-feedback').textContent='已手动重设为左、右各 48 个粒子。这是对照状态，不是实验结果。';counts();draw();});
+      $('.dfx-motion-note').textContent=reduced.matches?'已减少动画刷新频率。可随时暂停观察；金色圆环标出一个粒子。':'金色圆环标出一个粒子。留意它的方向，并不总与整体净迁移方向一致。';
+      var observer = typeof ResizeObserver!=='undefined'?new ResizeObserver(resize):null;if(observer)observer.observe(canvas);else on(window,'resize',resize);
+      function frame(now){if(dead)return;var elapsed=last?Math.max(0,(now-last)/1000):0;var dt=Math.min(elapsed,.045);last=now;clock+=dt;if(!paused){if(!gate)openTime+=elapsed;if(temp==='high')highTime+=elapsed;if(uniform)uniformTime+=elapsed;var speed=({low:.10,mid:.18,high:.29}[temp]);particles.forEach(function(p){p.a+=(Math.random()-.5)*2.2;var old=p.x;p.x+=Math.cos(p.a)*speed*dt;p.y+=Math.sin(p.a)*speed*dt*(w/h);if(p.x<.025||p.x>.975){p.x=Math.max(.025,Math.min(.975,p.x));p.a=Math.PI-p.a;}if(p.y<.06||p.y>.94){p.y=Math.max(.06,Math.min(.94,p.y));p.a=-p.a;}if(gate&&((old<.5)!==(p.x<.5))){p.x=old<.5?.488:.512;p.a=Math.PI-p.a;}});}if(!ready&&!answered&&!complete&&((stage===1&&openTime>=3)||(stage===2&&uniformTime>=2&&highTime>=2)))renderQuestion();if(clock>(reduced.matches?.20:.05)){draw();counts();clock=0;}raf=requestAnimationFrame(frame);}
+      reset();resize();raf=requestAnimationFrame(frame);
+      return function(){dead=true;cancelAnimationFrame(raf);if(observer)observer.disconnect();listeners.forEach(function(off){off();});container.innerHTML='';};
+    }
+  };
+})();

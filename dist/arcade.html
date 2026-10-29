@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102120">
+  <meta name="description" content="开着小载体，把彩色包裹送到正确收集站。8关原创休闲益智游戏，可选不限时练习与限时挑战。虚构规则，不模拟真实分子运输。">
+  <title>微观快递 · 一口科学</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='20' fill='%23102120'/%3E%3Crect x='15' y='13' width='34' height='39' rx='16' fill='%23f3f1dc'/%3E%3Ccircle cx='26' cy='31' r='4' fill='%23102120'/%3E%3Ccircle cx='39' cy='31' r='4' fill='%23102120'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="arcade.css">
+  <script defer src="arcade.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到游戏</a>
+  <header class="arcade-header">
+    <a class="brand" href="index.html#home"><span class="brand-mark" aria-hidden="true">◕</span><span>一口科学<small>ONE BITE SCIENCE</small></span></a>
+    <div class="header-actions"><span class="edition">THE TINY ARCADE / 01</span><button class="quiet" id="help-open">操作指南 <span aria-hidden="true">↗</span></button><a class="quiet" href="index.html#home">返回游乐场</a></div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <p id="storage-note" class="storage-note" role="status" hidden></p>
+    <section id="home-screen" class="home-screen" aria-labelledby="game-title">
+      <div class="title-hero">
+        <div class="hero-copy">
+          <span class="eyebrow"><span class="status-dot"></span> 小小载体，大大任务</span>
+          <h1 id="game-title">微观<em>快递</em><span class="title-suffix">MICRO COURIER</span></h1>
+          <p class="intro">带上一件彩色包裹，穿过弯弯绕绕的小工坊。<br class="wide-only">找到它的收集站，给今天多一份「送达」。</p>
+          <div class="feature-tags"><span>8 关原创路线</span><span>键盘 / 触屏</span><span>离线也能玩</span></div>
+          <fieldset class="mode-picker"><legend>先选一种节奏</legend>
+            <label><input type="radio" name="mode" value="practice" checked><span><strong>慢慢送</strong><small>不限时 · 无限尝试</small></span><span class="mode-check" aria-hidden="true">✓</span></label>
+            <label><input type="radio" name="mode" value="challenge"><span><strong>准时达</strong><small>限时挑战 · 3 格护盾</small></span><span class="mode-check" aria-hidden="true">✓</span></label>
+          </fieldset>
+          <div class="hero-actions"><button class="button primary" id="start-game">开始派送 <span aria-hidden="true">→</span></button><button class="button secondary" id="open-levels">关卡地图</button></div>
+          <p class="continue-note" id="continue-note">从第一站开始，把第一件包裹送到家。</p>
+        </div>
+        <div class="hero-drawing" aria-hidden="true">
+          <span class="drawing-label">DISPATCH STATION <b>001</b></span>
+          <svg viewBox="0 0 580 450" role="presentation">
+            <defs><pattern id="art-grid" width="41" height="41" patternUnits="userSpaceOnUse"><path d="M41 0H0V41" fill="none" stroke="#b8ee81" stroke-opacity=".1"/></pattern><filter id="art-shadow"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#061511" flood-opacity=".5"/></filter></defs>
+            <g transform="translate(40 66) rotate(-7 240 160)">
+              <rect x="0" y="0" width="490" height="328" rx="29" fill="#20392f" stroke="#496349"/>
+              <rect x="20" y="20" width="450" height="288" rx="17" fill="url(#art-grid)"/>
+              <g fill="#3d6246" stroke="#6e8c5b" stroke-width="2"><rect x="65" y="53" width="133" height="34" rx="10"/><rect x="65" y="53" width="34" height="113" rx="10"/><rect x="277" y="195" width="135" height="34" rx="10"/><rect x="378" y="130" width="34" height="99" rx="10"/></g>
+              <path d="M119 253H232V123H330V72H410" fill="none" stroke="#b8ee81" stroke-width="3" stroke-dasharray="3 12" stroke-linecap="round"/>
+              <g transform="translate(414 70)"><circle r="30" fill="#b8ee8119" stroke="#a3cd7e" stroke-width="2" stroke-dasharray="4 5"/><circle r="13" fill="#b8ee81"/><path d="m-5 0 4 4 7-8" fill="none" stroke="#29422f" stroke-width="3" stroke-linecap="round"/></g>
+              <g transform="translate(118 254)"><circle r="29" fill="#f3a98f15" stroke="#ce927c" stroke-width="2"/><path d="M0-12 12 0 0 12-12 0Z" fill="#f3a98f"/></g>
+              <g transform="translate(319 263)"><circle r="18" fill="#f3a98f25"/><path d="m0-10 10 10-10 10-10-10Z" fill="#f3a98f"/></g>
+              <g transform="translate(235 148)" filter="url(#art-shadow)"><ellipse cy="44" rx="36" ry="13" fill="#071c14" opacity=".3"/><rect x="-31" y="-31" width="62" height="76" rx="29" fill="#f2f0da" stroke="#fff9e8" stroke-width="2"/><rect x="-23" y="-7" width="46" height="29" rx="14" fill="#d9dfc8"/><ellipse cx="-10" cy="7" rx="5" ry="7" fill="#17332a"/><ellipse cx="10" cy="7" rx="5" ry="7" fill="#17332a"/><path d="M-8 31h16" stroke="#7b9970" stroke-width="3" stroke-linecap="round"/><path d="M-28-16q-18-11-17-25M28-16q18-11 17-25" stroke="#f2f0da" stroke-width="9" fill="none" stroke-linecap="round"/><circle cy="-48" r="22" fill="#b8ee81" stroke="#d5ffac" stroke-width="3"/><circle cx="-7" cy="-55" r="5" fill="#edffd7"/></g>
+            </g>
+            <g transform="translate(54 386)"><rect width="182" height="32" rx="16" fill="#b8ee81"/><text x="91" y="21" text-anchor="middle" fill="#17332a" font-size="11" font-weight="700" letter-spacing="1.5">ONE PARCEL AT A TIME</text></g>
+          </svg>
+          <div class="drawing-note"><span>●</span> 慢一点，也会抵达。</div>
+        </div>
+      </div>
+      <div class="home-bottom"><p><strong>怎么送？</strong> 方向键移动 · 空格取件与投递 · 颜色和图形要对应</p><button class="text-button" id="reset-progress">清除本地进度</button></div>
+    </section>
+
+    <section id="levels-screen" class="levels-screen" hidden aria-labelledby="levels-title">
+      <div class="section-heading"><div><span class="eyebrow">EIGHT LITTLE JOURNEYS</span><h1 id="levels-title">下一站，去哪里？</h1><p>完成一关就解锁下一关。慢慢送和准时达共享解锁进度。</p></div><button class="button secondary" id="levels-back">返回开始页</button></div>
+      <div id="level-grid" class="level-grid"></div>
+      <p class="map-note" id="map-mode-note"></p>
+    </section>
+
+    <section id="play-screen" hidden aria-labelledby="level-title">
+      <div class="play-heading"><div><span class="eyebrow" id="level-eyebrow">DISPATCH 01 / 08</span><h1 id="level-title"></h1><p id="level-description"></p></div><button class="button compact secondary" id="pause-game">暂停 <span class="keycap">Esc</span></button></div>
+      <div class="game-layout">
+        <div class="play-column">
+          <div class="hud" aria-label="本局状态"><div><small>已送达</small><strong id="hud-delivered">0 / 1</strong></div><div><small id="hud-time-label">用时</small><strong id="hud-time">00:00</strong></div><div><small id="hud-health-label">节奏</small><strong id="hud-health">慢慢送</strong></div><div class="cargo-status"><small>正在携带</small><strong id="hud-cargo">空手</strong></div></div>
+          <div class="board-wrap"><canvas id="game-canvas" width="780" height="540" tabindex="0" aria-label="微观快递游戏地图。方向键或WASD移动，空格取件、投递或使用机关。" aria-describedby="level-description controls-hint">你的浏览器需要支持 Canvas 才能显示游戏地图。</canvas><div class="board-badge" id="board-badge">慢慢送 · 不限时</div></div>
+          <div class="interaction-strip"><span class="interaction-dot" aria-hidden="true"></span><span id="action-prompt">靠近包裹，按空格取件</span><span class="keycap desktop-key">SPACE</span></div>
+          <div class="controls-row"><div class="dpad" role="group" aria-label="移动方向"><button data-direction="up" class="direction up" aria-label="向上移动">↑</button><button data-direction="left" class="direction left" aria-label="向左移动">←</button><span class="dpad-center" aria-hidden="true">✦</span><button data-direction="right" class="direction right" aria-label="向右移动">→</button><button data-direction="down" class="direction down" aria-label="向下移动">↓</button></div><p class="control-copy" id="controls-hint"><strong>方向键 / WASD</strong><span>移动小载体</span><small>手机可长按方向按钮</small></p><button class="interact-button" id="interact-game"><span id="interact-label">取件 / 投递</span><small>空格 · 点击交互</small></button></div>
+        </div>
+        <aside class="dispatch-sheet" aria-label="派送清单"><span class="eyebrow">YOUR DISPATCH NOTE</span><h2>这一站的小任务</h2><div id="goal-list" class="goal-list" aria-live="polite"></div><div class="rule-note"><span class="note-number">TIP</span><p id="level-tip"></p></div><dl class="map-legend"><div><dt><span class="legend-carrier"></span></dt><dd>你的小载体</dd></div><div><dt><span class="legend-parcel"></span></dt><dd>小图形：待取包裹</dd></div><div><dt><span class="legend-dock">○</span></dt><dd>大圆环：收集站</dd></div><div><dt><span class="legend-rotor">╱</span></dt><dd>珊瑚旋臂：避开它</dd></div></dl><p class="safe-note" id="mode-note"></p><button class="text-button" id="play-help">查看所有机关说明 ↗</button></aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="arcade-footer"><span>虚构益智游戏，不模拟真实分子运输。</span><span>没有账号 · 成绩只存于当前浏览器</span></footer>
+  <div id="game-toast" class="game-toast" role="status" aria-live="polite"></div>
+  <dialog id="game-dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>
+  <noscript><p class="noscript">启用 JavaScript 后即可开始派送。游戏不需要登录或联网。</p></noscript>
+</body>
+</html>

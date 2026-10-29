@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+node_modules/
+__pycache__/
+*.pyc
+work/
+.openai/
+.env
+.env.*
+*.log
+*.tmp
+*.tar
+*.zip
