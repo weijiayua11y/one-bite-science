@@ -59,3 +59,5 @@ scripts/    静态资源与知识卡完整性检查
 ```
 
 运行 `python scripts/check_release.py` 可核对本地网页引用与知识卡数据。首页两张装饰插画由图像生成工具制作；游戏与科学图形由程序绘制。仓库不包含本机字体文件、个人工作记录或私有部署配置。
+
+配套媒体资料：[SRT 字幕](media/subtitles)、[完整字幕稿与来源说明](media/transcripts)、[手机竖屏封面](media/covers)。
